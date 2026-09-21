@@ -17,7 +17,7 @@ import {
   type StreamOptions,
   type TranscriptContext,
 } from "@earendil-works/pi-ai";
-import * as upstream from "@earendil-works/pi-ai/api/openai-responses";
+import { openAIResponsesApi } from "@earendil-works/pi-ai/compat";
 import { parsePromptProgress, type PromptProgress } from "./prompt-progress.js";
 
 type EventRecord = Record<string, unknown> & { type?: string; output_index?: number; item_id?: string };
@@ -182,6 +182,8 @@ function requestOptions<T extends StreamOptions>(options: T | undefined): T {
     },
   } as T;
 }
+
+const upstream = openAIResponsesApi();
 
 function clearOnTermination(inner: AssistantMessageEventStream): AssistantMessageEventStream {
   const outer = createAssistantMessageEventStream();

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-21
+
+### Fixed
+
+- Load the OpenAI Responses adapter through pi's supported compatibility export
+  so Git-installed packages work without their own pi-ai dependency.
+- Verify extension loading from the packed artifact without development
+  dependencies.
+
 ## [0.1.0] - 2026-09-21
 
 ### Added
