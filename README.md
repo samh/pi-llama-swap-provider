@@ -6,7 +6,7 @@ A dynamic [pi](https://pi.dev) provider for llama-swap. It discovers eligible co
 
 I wrote the original extension with pi using `gpt-5.4`. I developed this packaged version with pi using `gpt-5.6-sol`; that assistance is recorded in the `Assisted-by` trailers in the Git history.
 
-The prompt-processing progress display was inspired by [openlumara](https://github.com/Rose22/openlumara), a neat little web-based harness designed specifically for local models.
+I got the idea for the prompt-processing progress display from [OpenLumara](https://github.com/Rose22/openlumara). It's a neat little harness, with a web UI, specifically written for use with local models.
 
 ## Requirements
 
