@@ -1,29 +1,19 @@
 import { createProvider, type ApiKeyCredential } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import { truncateToWidth } from "@earendil-works/pi-tui";
 import { API_KEY_ENV, login, resolveAuth } from "./auth.js";
 import { configurationForRefresh, fetchCatalogue } from "./models.js";
 import { formatPromptProgress, type PromptProgress } from "./prompt-progress.js";
 import { llamaSwapResponsesApi, setPromptProgressListener } from "./responses-stream.js";
 
 const PROVIDER_ID = "llama-swap";
-const WIDGET_ID = "llama-swap-prompt-progress";
 
-function installProgressWidget(ctx: ExtensionContext): { clear(): void; dispose(): void } {
+function installProgressMessage(ctx: ExtensionContext): { clear(): void; dispose(): void } {
   let pending: PromptProgress | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined;
 
   const render = () => {
     timer = undefined;
-    if (!pending) {
-      ctx.ui.setWidget(WIDGET_ID, undefined);
-      return;
-    }
-    const text = formatPromptProgress(pending);
-    ctx.ui.setWidget(WIDGET_ID, (_tui, theme) => ({
-      render: (width) => [truncateToWidth(theme.fg("muted", text), width)],
-      invalidate() {},
-    }), { placement: "belowEditor" });
+    ctx.ui.setWorkingMessage(pending ? formatPromptProgress(pending) : undefined);
   };
 
   setPromptProgressListener((progress) => {
@@ -40,7 +30,7 @@ function installProgressWidget(ctx: ExtensionContext): { clear(): void; dispose(
     if (timer) clearTimeout(timer);
     timer = undefined;
     pending = undefined;
-    ctx.ui.setWidget(WIDGET_ID, undefined);
+    ctx.ui.setWorkingMessage();
   };
   return {
     clear,
@@ -109,15 +99,15 @@ export default async function llamaSwapExtension(pi: ExtensionAPI): Promise<void
 
   pi.registerProvider(provider);
 
-  let widget: ReturnType<typeof installProgressWidget> | undefined;
+  let progressMessage: ReturnType<typeof installProgressMessage> | undefined;
   pi.on("session_start", (_event, ctx) => {
     activeContext = ctx;
-    widget?.dispose();
-    widget = installProgressWidget(ctx);
+    progressMessage?.dispose();
+    progressMessage = installProgressMessage(ctx);
   });
-  pi.on("model_select", () => widget?.clear());
+  pi.on("model_select", () => progressMessage?.clear());
   pi.on("session_shutdown", () => {
     activeContext = undefined;
-    widget?.dispose();
+    progressMessage?.dispose();
   });
 }

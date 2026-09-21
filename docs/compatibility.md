@@ -28,7 +28,7 @@ The following passed against the runtime-supplied test endpoint:
 - context-overflow and unknown-model error propagation;
 - interactive login, automatic model refresh, stored-credential restart, and
   logout;
-- progress-widget rendering and cleanup after cancellation.
+- working-message progress rendering and cleanup after cancellation.
 
 After logout, pi's model picker may still show the cached llama-swap model
 catalog. Requests remain blocked because the credential is gone. This matches

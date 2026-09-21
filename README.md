@@ -1,6 +1,6 @@
 # pi-llama-swap-provider
 
-A dynamic [pi](https://pi.dev) provider for llama-swap. It discovers eligible coding models from `/v1/models`, sends inference through the OpenAI Responses API, and displays llama-server prompt-prefill progress below the editor.
+A dynamic [pi](https://pi.dev) provider for llama-swap. It discovers eligible coding models from `/v1/models`, sends inference through the OpenAI Responses API, and displays llama-server prompt-prefill progress in pi's working indicator.
 
 ## Acknowledgements
 

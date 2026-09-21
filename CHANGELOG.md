@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Show prompt-prefill progress in pi's existing working indicator instead of
+  adding and removing a separate widget below the editor.
+
 ### Fixed
 
 - Expose the extension through a root entry point so pi displays the package
