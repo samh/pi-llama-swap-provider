@@ -14,7 +14,7 @@ The prompt-processing progress display was inspired by [openlumara](https://gith
 - llama-swap with public model metadata
 - a backend implementing `/v1/responses`
 
-Prompt progress uses the non-standard `return_progress: true` request field. Backends that ignore it should continue normally without a progress widget.
+Prompt progress uses the non-standard `return_progress: true` request field; this is documented in the [llama-server README](https://github.com/ggml-org/llama.cpp/tree/master/tools/server). Backends that ignore it should continue normally without a progress widget.
 
 ## Install
 
