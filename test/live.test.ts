@@ -101,7 +101,6 @@ describe.skipIf(!enabled)("llama-swap live Responses transport", () => {
     const continued = await llamaSwapResponsesApi.streamSimple(
       fastModel,
       normalizeContext({
-        tools: [tool],
         messages: [
           { role: "user", content: firstPrompt, timestamp: Date.now() },
           first,
