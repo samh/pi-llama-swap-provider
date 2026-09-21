@@ -52,6 +52,7 @@ describe("extension login lifecycle", () => {
 
     await login(provider, ["https://server.example", ""]);
 
+    expect(provider.getModels().map((model: { id: string }) => model.id)).toContain("fixture-model");
     await vi.waitFor(() => expect(refresh).toHaveBeenCalledWith({
       providers: ["llama-swap"],
       force: true,
