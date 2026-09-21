@@ -33,6 +33,12 @@ catalog. Requests remain blocked because the credential is gone. This matches
 pi's behavior for other logged-out providers.
 
 Malformed and absent progress metadata, and a backend that ignores
-`return_progress`, are covered by protocol tests. Login replacement with a
-second endpoint still requires explicit gate coverage. A Chat Completions
-fallback decision also remains a v0.1.0 release gate.
+`return_progress`, are covered by protocol tests.
+
+## No Chat Completions fallback
+
+This package requires a backend with `/v1/responses`. It does not fall back to
+Chat Completions. A fallback would not preserve prompt progress and would add a
+second transport after Responses passed the parity checks. Servers without a
+Responses endpoint fail with the provider error instead of silently changing
+protocols.
