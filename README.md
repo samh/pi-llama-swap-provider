@@ -24,7 +24,7 @@ pi install /absolute/path/to/pi-llama-swap-provider
 For releases, install a pinned Git tag rather than a moving branch:
 
 ```sh
-pi install git:<repository-url>@v0.1.0
+pi install git:github.com/samh/pi-llama-swap-provider@v0.1.0
 ```
 
 Update or remove the package with `pi update --extensions` and `pi remove <source>`.
