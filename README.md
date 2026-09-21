@@ -2,6 +2,12 @@
 
 A dynamic [pi](https://pi.dev) provider for llama-swap. It discovers eligible coding models from `/v1/models`, sends inference through the OpenAI Responses API, and displays llama-server prompt-prefill progress below the editor.
 
+## Acknowledgements
+
+I wrote the original extension with pi using `gpt-5.4`. I developed this packaged version with pi using `gpt-5.6-sol`; that assistance is recorded in the `Assisted-by` trailers in the Git history.
+
+The prompt-processing progress display was inspired by [openlumara](https://github.com/Rose22/openlumara), a neat little web-based harness designed specifically for local models.
+
 ## Requirements
 
 - pi 0.86.0 or newer
