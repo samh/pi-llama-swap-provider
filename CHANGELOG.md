@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Expose the extension through a root entry point so pi displays the package
+  without a `:src` suffix.
+
 ## [0.1.1] - 2026-09-21
 
 ### Fixed

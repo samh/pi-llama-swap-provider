@@ -18,6 +18,7 @@
     "llama.cpp"
   ],
   "files": [
+    "index.ts",
     "src",
     "docs",
     "README.md",
@@ -26,7 +27,7 @@
   ],
   "pi": {
     "extensions": [
-      "./src/index.ts"
+      "./index.ts"
     ]
   },
   "scripts": {
