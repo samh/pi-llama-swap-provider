@@ -2,8 +2,6 @@
 
 A dynamic [pi](https://pi.dev) provider for llama-swap. It discovers eligible coding models from `/v1/models`, sends inference through the OpenAI Responses API, and displays llama-server prompt-prefill progress below the editor.
 
-> Active development: keep an existing provider enabled until the live parity matrix is complete.
-
 ## Requirements
 
 - pi 0.86.0 or newer
@@ -74,8 +72,10 @@ LLAMA_SWAP_LIVE_REASONING_MODEL=<reasoning-model-id> \
 npm run test:live
 ```
 
-Set `LLAMA_SWAP_API_KEY` as well when the endpoint requires it. Live tests
-never contain or snapshot endpoint URLs, keys, or model IDs.
+Use `npm run verify:release` with the same variables to run type checking, unit
+tests, live tests, and a package dry run. Set `LLAMA_SWAP_API_KEY` as well when
+the endpoint requires it. Live tests never contain or snapshot endpoint URLs,
+keys, or model IDs.
 
 See [architecture](docs/architecture.md) and [compatibility](docs/compatibility.md).
 

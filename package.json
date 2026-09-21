@@ -33,7 +33,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --exclude test/live.test.ts",
     "test:live": "RUN_LLAMA_SWAP_LIVE=1 vitest run test/live.test.ts",
-    "verify": "npm run typecheck && npm test"
+    "verify": "npm run typecheck && npm test",
+    "verify:release": "npm run verify && npm run test:live && npm pack --dry-run"
   },
   "peerDependencies": {
     "@earendil-works/pi-ai": "*",
