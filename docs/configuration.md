@@ -25,4 +25,6 @@ When `LLAMA_SWAP_BASE_URL` is set, the extension loads the model list at startup
 - Ensure catalogue entries have `meta.llamaswap.type: "model"`.
 - Models explicitly advertising `capabilities.function_calling: false`, or output modalities without text, are intentionally excluded.
 - To replace a stored URL or key, run `/login llama-swap` again.
-- To remove the stored connection, run `/logout`.
+- To remove the stored connection, run `/logout`. Pi may continue to show the
+  cached llama-swap model names in `/model`, but requests remain blocked until
+  you log in again.

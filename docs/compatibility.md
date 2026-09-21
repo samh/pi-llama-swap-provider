@@ -23,9 +23,16 @@ The following passed against the runtime-supplied test endpoint:
 - uncached progress and cached-prefix progress;
 - image input;
 - cancellation during prefill and generation;
-- context-overflow and unknown-model error propagation.
+- context-overflow and unknown-model error propagation;
+- interactive login, automatic model refresh, stored-credential restart, and
+  logout;
+- progress-widget rendering and cleanup after cancellation.
+
+After logout, pi's model picker may still show the cached llama-swap model
+catalog. Requests remain blocked because the credential is gone. This matches
+pi's behavior for other logged-out providers.
 
 Malformed and absent progress metadata, and a backend that ignores
-`return_progress`, are covered by protocol tests. Interactive login/logout
-replacement and TUI widget rendering still require explicit gate coverage. A
-Chat Completions fallback decision also remains a v0.1.0 release gate.
+`return_progress`, are covered by protocol tests. Login replacement with a
+second endpoint still requires explicit gate coverage. A Chat Completions
+fallback decision also remains a v0.1.0 release gate.
