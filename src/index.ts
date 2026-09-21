@@ -1,4 +1,4 @@
-import { createProvider, type ApiKeyCredential, type Model, type Provider } from "@earendil-works/pi-ai";
+import { createProvider, type ApiKeyCredential } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { truncateToWidth } from "@earendil-works/pi-tui";
 import { API_KEY_ENV, login, resolveAuth } from "./auth.js";
@@ -80,9 +80,8 @@ export default async function llamaSwapExtension(pi: ExtensionAPI): Promise<void
   const initialModels = initialConfig
     ? await fetchCatalogue(initialConfig.baseUrl, initialConfig.apiKey)
     : [];
-  let immediateModels = initialModels;
 
-  const baseProvider = createProvider<"openai-responses">({
+  const provider = createProvider<"openai-responses">({
     id: PROVIDER_ID,
     name: "llama-swap",
     auth: {
@@ -90,33 +89,23 @@ export default async function llamaSwapExtension(pi: ExtensionAPI): Promise<void
         name: "llama-swap connection",
         login: (interaction) => login(interaction, async (baseUrl, apiKey, signal) => {
           const resolvedApiKey = apiKey || process.env[API_KEY_ENV] || undefined;
-          immediateModels = await fetchCatalogue(baseUrl, resolvedApiKey, signal);
+          await fetchCatalogue(baseUrl, resolvedApiKey, signal);
           void refreshAfterLogin(baseUrl, resolvedApiKey);
         }),
         resolve: resolveAuth,
       },
     },
-    models: [],
+    models: initialModels,
     fetchModels: async ({ credential, signal, allowNetwork }) => {
       if (!allowNetwork) return [];
       const config = await configurationForRefresh(
         credential?.type === "api_key" ? credential as ApiKeyCredential : undefined,
       );
       if (!config) return [];
-      immediateModels = await fetchCatalogue(config.baseUrl, config.apiKey, signal);
-      return immediateModels;
+      return fetchCatalogue(config.baseUrl, config.apiKey, signal);
     },
     api: llamaSwapResponsesApi,
   });
-
-  const provider: Provider<"openai-responses"> = {
-    ...baseProvider,
-    getModels(): readonly Model<"openai-responses">[] {
-      const models = new Map(baseProvider.getModels().map((model) => [model.id, model]));
-      for (const model of immediateModels) models.set(model.id, model);
-      return [...models.values()];
-    },
-  };
 
   pi.registerProvider(provider);
 

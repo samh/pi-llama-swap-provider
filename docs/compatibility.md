@@ -12,6 +12,8 @@ llama-swap routing support does not imply that every configured backend supports
 
 Known protocol accommodation: llama-server Responses events may omit `output_index`. The package assigns stable indices using output item IDs before pi's parser receives events.
 
+Pi 0.86 refreshes the provider catalog after login, but it does not rebuild an existing session-scoped model list. Newly discovered models appear under `all` in `/model` immediately. The `scoped` view includes them after restart.
+
 ## Live smoke results
 
 The following passed against the runtime-supplied test endpoint:

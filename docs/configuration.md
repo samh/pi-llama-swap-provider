@@ -6,7 +6,7 @@ Run `/login llama-swap` in pi. Enter an absolute HTTP(S) llama-swap URL. An orig
 
 Pi stores the resulting credential in its standard auth store. This package does not create a credential file.
 
-After login, the extension fetches `/v1/models`. The returned models appear in `/model` without another command.
+After login, the extension fetches `/v1/models`. The returned models appear under `all` in `/model` without another command. Pi 0.86 resolves the `scoped` list at startup, so an existing scope picks up newly discovered models after restart.
 
 ## Environment
 

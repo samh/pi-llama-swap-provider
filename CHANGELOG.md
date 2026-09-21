@@ -12,8 +12,6 @@ All notable changes to this project will be documented in this file.
   so Git-installed packages work without their own pi-ai dependency.
 - Verify extension loading from the packed artifact without development
   dependencies.
-- Make validated models available to the current pi session before login
-  synchronization completes.
 
 ## [0.1.0] - 2026-09-21
 

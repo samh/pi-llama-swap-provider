@@ -37,7 +37,7 @@ Interactive setup is the primary flow:
 
 Enter the llama-swap OpenAI base URL and, if needed, an API key. Pi stores these in its normal credential store. The package never writes its own credential file.
 
-After login, the extension loads the server's model list. The models then appear in `/model` without another command. Logging out removes the credential, but pi may continue to show the cached model names. Requests stay blocked until you log in again.
+After login, the extension loads the server's model list. The models appear under `all` in `/model` without another command. In pi 0.86, an existing `scoped` list is resolved at startup and picks up newly discovered models after restart. Logging out removes the credential, but pi may continue to show cached model names. Requests stay blocked until you log in again.
 
 For CI, containers, and other non-interactive use:
 
