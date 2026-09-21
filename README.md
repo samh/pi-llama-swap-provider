@@ -39,6 +39,8 @@ Interactive setup is the primary flow:
 
 Enter the llama-swap OpenAI base URL and, if needed, an API key. Pi stores these in its normal credential store. The package never writes its own credential file.
 
+After login, the extension loads the server's model list. The models then appear in `/model` without another command.
+
 For CI, containers, and other non-interactive use:
 
 ```sh
@@ -46,7 +48,7 @@ export LLAMA_SWAP_BASE_URL=https://server.example/v1
 export LLAMA_SWAP_API_KEY=... # optional
 ```
 
-There is no localhost default. Requests without an API key omit authorization. See [configuration](docs/configuration.md).
+There is no localhost default. Requests without an API key omit authorization. Environment-based setup loads the model list at startup. See [configuration](docs/configuration.md).
 
 ## Model discovery
 
@@ -62,6 +64,18 @@ npm run typecheck
 npm test
 npm run verify
 ```
+
+Opt-in live protocol tests require runtime-supplied configuration:
+
+```sh
+LLAMA_SWAP_BASE_URL=https://server.example/v1 \
+LLAMA_SWAP_LIVE_FAST_MODEL=<fast-model-id> \
+LLAMA_SWAP_LIVE_REASONING_MODEL=<reasoning-model-id> \
+npm run test:live
+```
+
+Set `LLAMA_SWAP_API_KEY` as well when the endpoint requires it. Live tests
+never contain or snapshot endpoint URLs, keys, or model IDs.
 
 See [architecture](docs/architecture.md) and [compatibility](docs/compatibility.md).
 

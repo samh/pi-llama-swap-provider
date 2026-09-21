@@ -1,6 +1,6 @@
 # Architecture
 
-The extension registers a native pi-ai `Provider` with an initially empty model list. During a configured model refresh, `src/models.ts` fetches `${baseUrl}/models`, converts eligible llama-swap model records into deterministic pi models, and publishes the resulting in-memory catalogue through `createProvider()`.
+The extension registers a native pi-ai `Provider`. With environment-based configuration, it fetches `${baseUrl}/models` during startup. After interactive login, it waits for pi to save the credential and then refreshes the model list automatically. `src/models.ts` converts eligible llama-swap records into pi models.
 
 Authentication is owned by pi. `src/auth.ts` normalizes `/v1` URLs and resolves each field with stored credentials taking precedence over ambient environment variables.
 
