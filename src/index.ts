@@ -55,7 +55,8 @@ export default async function llamaSwapExtension(pi: ExtensionAPI): Promise<void
       if (auth?.auth.baseUrl !== baseUrl || auth.auth.apiKey !== apiKey) continue;
 
       const result = await ctx.modelRegistry.refresh({ providers: [PROVIDER_ID], force: true });
-      const error = result.errors.get(PROVIDER_ID);
+      // Older Pi versions return void from refresh(), even on success.
+      const error = result?.errors?.get(PROVIDER_ID);
       if (error) ctx.ui.notify(`Could not load llama-swap models: ${error.message}`, "error");
       return;
     }
@@ -80,7 +81,12 @@ export default async function llamaSwapExtension(pi: ExtensionAPI): Promise<void
         login: (interaction) => login(interaction, async (baseUrl, apiKey, signal) => {
           const resolvedApiKey = apiKey || process.env[API_KEY_ENV] || undefined;
           await fetchCatalogue(baseUrl, resolvedApiKey, signal);
-          void refreshAfterLogin(baseUrl, resolvedApiKey);
+          void refreshAfterLogin(baseUrl, resolvedApiKey).catch((error: unknown) => {
+            activeContext?.ui.notify(
+              `Could not load llama-swap models: ${error instanceof Error ? error.message : String(error)}`,
+              "error",
+            );
+          });
         }),
         resolve: resolveAuth,
       },

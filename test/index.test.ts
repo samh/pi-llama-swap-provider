@@ -12,7 +12,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-async function setupExtension(getProviderAuth: ReturnType<typeof vi.fn>) {
+async function setupExtension(
+  getProviderAuth: ReturnType<typeof vi.fn>,
+  refresh = vi.fn(async (): Promise<any> => ({ aborted: false, errors: new Map() })),
+) {
   delete process.env.LLAMA_SWAP_BASE_URL;
   delete process.env.LLAMA_SWAP_API_KEY;
   vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({
@@ -27,12 +30,12 @@ async function setupExtension(getProviderAuth: ReturnType<typeof vi.fn>) {
   };
   await llamaSwapExtension(pi as any);
 
-  const refresh = vi.fn(async () => ({ aborted: false, errors: new Map() }));
+  const notify = vi.fn();
   handlers.get("session_start")?.({}, {
     modelRegistry: { getProviderAuth, refresh },
-    ui: { setWidget: vi.fn(), notify: vi.fn() },
+    ui: { setWidget: vi.fn(), notify },
   });
-  return { provider, refresh };
+  return { provider, refresh, notify };
 }
 
 async function login(provider: any, answers: string[]) {
@@ -56,6 +59,33 @@ describe("extension login lifecycle", () => {
       providers: ["llama-swap"],
       force: true,
     }));
+  });
+
+  it("handles older Pi refresh methods that return no result", async () => {
+    const refresh = vi.fn(async (): Promise<any> => undefined);
+    const getProviderAuth = vi.fn(async () => ({
+      auth: { baseUrl: "https://server.example/v1" },
+    }));
+    const { provider, notify } = await setupExtension(getProviderAuth, refresh);
+
+    await login(provider, ["https://server.example", ""]);
+
+    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+    // Allow the detached post-login task to finish; it must not reject.
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(notify).not.toHaveBeenCalled();
+  });
+
+  it("reports refresh failures without an unhandled rejection", async () => {
+    const refresh = vi.fn(async (): Promise<any> => { throw new Error("server unavailable"); });
+    const getProviderAuth = vi.fn(async () => ({ auth: { baseUrl: "https://server.example/v1" } }));
+    const { provider, notify } = await setupExtension(getProviderAuth, refresh);
+
+    await login(provider, ["https://server.example", ""]);
+
+    await vi.waitFor(() => expect(notify).toHaveBeenCalledWith(
+      "Could not load llama-swap models: server unavailable", "error",
+    ));
   });
 
   it("waits for a replacement credential before refreshing", async () => {
